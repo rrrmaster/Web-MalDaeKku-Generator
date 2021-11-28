@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>말대꾸 짤 생성기</title>
+    <link rel="shortcut icon" href="assets/favicon.ico">
+
+    <meta property="og:title" content="말대꾸 짤 생성기기" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/images/openGraph.png" />
+
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
+    <style>
+        @font-face {
+            font-family: '나눔고딕';
+            src: url('assets/fonts/NanumGothicBold.otf') format('truetype');
+            font-style: normal;
+        }
+
+        canvas {
+            width: 500px;
+        }
+    </style>
+</head>
+
+<body style="height: 100vh;">
+    <div class="container h-100">
+        <div class="h-100 d-flex justify-content-center flex-column">
+            <h1 class="text-center fex">김성모 말대꾸 짤 생성기</h1>
+            <div class="d-flex justify-content-between justify-content-md-center flex-wrap">
+                <div class="p-3 w-100 d-flex flex-column justify-content-center" style="max-width: 600px;">
+                    <div class="mb-3">
+                        <label for="firstLine" class="form-label">첫번째 라인</label>
+                        <input type="text" class="form-control" maxlength=10 value="개발자가···" id="firstLine"
+                            placeholder="상단 말풍선선">
+                        <span id="fisrtCount">1/10</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="secondLine" class="form-label">두번째 라인</label>
+                        <input type="text" class="form-control" maxlength=10 value="말대꾸?!" id="secondLine"
+                            placeholder="하단 말풍선선">
+                        <span id="secondCount">1/10</span>
+                    </div>
+                </div>
+                <div class="m-auto">
+                    <canvas id="test" width="850px" height="1321px"></canvas>
+                </div>
+            </div>
+            <div class="w-100 d-flex justify-content-center">
+                <button id="save" type="button" class="btn btn-success">이미지 다운로드</button>
+
+            </div>
+            <footer class="m-5">
+                <p class="text-center">© 2021 Copyright ❤️ <a href="https://github.com/rrrmaster">rrrmaster</a></p>
+            </footer>
+
+        </div>
+    </div>
+    <script>
+        var canvas = document.getElementById('test')
+        var ctx = canvas.getContext("2d");
+        var fisrtInput = document.getElementById('firstLine')
+        var secondInput = document.getElementById('secondLine')
+        var fisrtCount = document.getElementById('fisrtCount')
+        var secondCount = document.getElementById('secondCount')
+        var saveButton = document.getElementById('save')
+        var imgClo = new Image();
+        var myFont = new FontFace('NanumGothic', 'url(assets/fonts/NanumGothicBold.otf)');
+
+
+        fisrtCount.innerText=fisrtInput.value.length +'/'+10
+        secondCount.innerText=secondInput.value.length +'/'+10
+        imgClo.src = "assets/images/origin.png";
+        imgClo.onload = () => {
+            Draw();
+        };
+        function Draw() {
+            myFont.load().then((font) => {
+
+                document.fonts.add(font);
+                ctx.drawImage(imgClo, 0, 0, 850, 1321);
+                ctx.font = '90px 나눔고딕';
+                ctx.textAlign = 'center'
+                ctx.fillText(fisrtInput.value, 405, 260);
+                ctx.font = '110px 나눔고딕';
+                ctx.fillText(secondInput.value, 425, 1120);
+            })
+        }
+        fisrtInput.oninput = (e) => {
+            fisrtCount.innerText=fisrtInput.value.length +'/'+10
+            Draw()
+        }
+        secondInput.oninput = (e) => {
+            secondCount.innerText=secondInput.value.length +'/'+10
+            Draw()
+        }
+        saveButton.onclick = (e) => {
+            var image = canvas.toDataURL("image/png;base64");
+            var aDownloadLink = document.createElement('a');
+            aDownloadLink.download = fisrtInput.value + secondInput.value + '.png';
+            aDownloadLink.href = image;
+            aDownloadLink.click();
+        }
+    </script>
+</body>
+
+</html>
